@@ -5,12 +5,18 @@
   "main": "./src/app.ts",
   "license": "MIT",
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@web/dev-server": "^0.1.31",
+    "vite": "^2.9.5",
     "typescript": "^4.6.3"
   },
   "scripts": {
+    "dev": "vite",
     "ts": "tsc -w",
     "serve": "cd public && web-dev-server --node-resolve --watch --open --app-index index.html",
     "start": "yarn ts & yarn serve"
+  },
+  "dependencies": {
+    "webnative": "^0.31.1"
   }
 }
