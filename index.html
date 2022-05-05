@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>fumblr</title>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div id="app"></div>
+    <h1 class="title">fumblr</h1>
+    <h2 class="subtitle">Write stuff. Store it in IPFS.</h2>
+    <input type="text" class="title-input" placeholder="Title" />
+    <textarea class="body-input" placeholder="Body"></textarea>
+    <input type="submit" class="post-button" value="Post" />
+    <footer>
+      <p>
+        A <a href="https://fission.codes">Fission</a> experiment by
+        <a href="https://jessmart.in">Jess Martin</a>.
+      </p>
+    </footer>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
