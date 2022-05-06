@@ -6,7 +6,7 @@ const state = await wn
   .initialise({
     permissions: {
       app: {
-        name: "fumblr",
+        name: "mumblr",
         creator: "Jess Martin",
       },
       fs: {
