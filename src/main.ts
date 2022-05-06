@@ -10,8 +10,8 @@ const state = await wn
         creator: "Jess Martin",
       },
       fs: {
-        private: [wn.path.directory("Posts", "Private")],
-        public: [wn.path.directory("Posts", "Public")],
+        private: [wn.path.directory("Posts")], // This will be `private/Posts`
+        public: [wn.path.directory("Posts")], // This will be `public/Posts`
       },
     },
   })
@@ -24,32 +24,47 @@ const state = await wn
     }
   });
 
+// Give me maximum debuggage
+wn.setup.debug({ enabled: true });
+
 let fs: FileSystem | undefined;
 
 switch (state?.scenario) {
   case wn.Scenario.AuthCancelled:
+    console.log("Auth cancelled by user");
     break;
 
   case wn.Scenario.AuthSucceeded:
   case wn.Scenario.Continuation:
-    // TODO: Maybe put some 'logged in' state at the top right?
+    // TODO: Maybe put some 'logged in as' state at the top right?
+    console.log("Logged in");
     fs = state.fs;
     break;
 
   case wn.Scenario.NotAuthorised:
     wn.redirectToLobby(state.permissions);
+    console.log("Redirected to lobby");
     break;
 }
 
 const post = document.querySelector<HTMLInputElement>("#post")!;
 
-post.addEventListener("click", function () {
+post.addEventListener("click", async function () {
   console.log("attempting to save file");
   const title = document.querySelector<HTMLInputElement>(".title-input")!;
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
-  if (fs !== undefined && fs.appPath !== undefined) {
-    fs.add(`${fs.appPath()}/Posts/Public/${title.value}.md`, body.value).then(
-      console.log("saved file")
-    );
+  if (fs !== undefined) {
+    const filePath = wn.path.file("public", "Posts", `${title.value}.md`);
+    await fs.add(filePath, body.value).then(() => {
+      console.log("file saved");
+    });
+    await fs
+      .publish()
+      .then(() => {
+        console.log("file system published");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
