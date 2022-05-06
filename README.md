@@ -1,3 +1,3 @@
-# fumblr
+# mumblr
 
 Decentralizing blogging.
