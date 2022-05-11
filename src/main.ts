@@ -52,7 +52,11 @@ const post = document.querySelector<HTMLInputElement>("#post")!;
 post.addEventListener("click", async function () {
   console.log("attempting to save file");
   const title = document.querySelector<HTMLInputElement>(".title-input")!;
+  // If title is blank, don't allow saving?
+
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
+  // If body is blank, don't allow saving?
+
   if (fs !== undefined) {
     const filePath = wn.path.file("public", "Posts", `${title.value}.md`);
     await fs.add(filePath, body.value).then(() => {
@@ -66,5 +70,14 @@ post.addEventListener("click", async function () {
       .catch((err) => {
         console.log(err);
       });
+  } else {
+    console.log("no file system");
   }
+});
+
+const logOut = document.querySelector<HTMLInputElement>("#log-out")!;
+logOut.addEventListener("click", async function () {
+  wn.leave().then(() => {
+    console.log("Logged out");
+  });
 });
