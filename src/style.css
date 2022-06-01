@@ -121,6 +121,16 @@ header {
   float: right;
   margin-top: 26px;
   margin-left: 20px;
+  display: none;
+}
+
+#log-in {
+  clear: both;
+  margin: 0 auto;
+  background: #fff url("/logo-dark.svg") no-repeat top left;
+  background-size: 300px 20px;
+  background-position: top 10px left 0px;
+  padding-right: 110px;
 }
 
 .subtitle {
@@ -134,11 +144,14 @@ header {
 input.title-input {
   font-weight: 700;
   font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .title-input,
 .body-input {
   width: 100%;
+  font-weight: 700;
+  display: none;
 }
 
 input.title-input:focus,
@@ -155,6 +168,7 @@ textarea.body-input {
   width: 100%;
   background: var(--frost);
   font-weight: 700;
+  display: none;
 }
 
 .post-button:hover {
