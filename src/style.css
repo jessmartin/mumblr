@@ -117,12 +117,18 @@ header {
   float: left;
 }
 
+#log-out {
+  float: right;
+  margin-top: 26px;
+  margin-left: 20px;
+}
+
 .subtitle {
   font-size: 1rem;
   font-weight: normal;
   color: var(--light);
   float: right;
-  margin-top: 42px;
+  margin-top: 36px;
 }
 
 input.title-input {
