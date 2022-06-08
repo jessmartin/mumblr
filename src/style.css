@@ -91,9 +91,9 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-button:hover,
+button:hover:enabled,
 button:focus,
-input[type="submit"].card:hover,
+input[type="submit"].card:hover:enabled,
 input[type="submit"].card:focus {
   cursor: pointer;
   opacity: 0.75;

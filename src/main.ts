@@ -47,12 +47,17 @@ switch (state?.scenario) {
     console.log("Connected");
     connectionStatus.value = "C";
     connectionStatus.style.color = "green";
-    fs = state.fs;
+    fs = state.fs; // Load the filesystem
     connectionStatus.addEventListener("click", async function () {
       wn.leave().then(() => {
         console.log("Disconnected");
       });
     });
+    // Enable the UI
+    document.querySelector<HTMLButtonElement>("#post")!.disabled = false;
+    document.querySelector<HTMLInputElement>("#title-input")!.disabled = false;
+    document.querySelector<HTMLTextAreaElement>("#body-input")!.disabled =
+      false;
     break;
 
   case wn.Scenario.NotAuthorised:
