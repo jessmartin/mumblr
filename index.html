@@ -11,12 +11,34 @@
     />
   </head>
   <body>
-    <input id="log-out" type="submit" class="log-out" value="Log out" />
+    <input
+      id="connect-disconnect"
+      type="submit"
+      class="connect-disconnect"
+      value="D"
+    />
     <h1 class="title">mumblr</h1>
     <h2 class="subtitle">Write stuff. Store it in IPFS.</h2>
-    <input type="text" class="title-input" placeholder="Title" />
-    <textarea class="body-input" placeholder="Body"></textarea>
-    <input id="post" type="submit" class="post-button" value="Publish" />
+    <input
+      type="text"
+      id="title-input"
+      class="title-input"
+      placeholder="Title"
+      disabled="true"
+    />
+    <textarea
+      class="body-input"
+      id="body-input"
+      placeholder="Body"
+      disabled="true"
+    ></textarea>
+    <input
+      id="post"
+      type="submit"
+      class="post-button"
+      disabled="true"
+      value="Publish"
+    />
     <footer>
       <p>
         A <a href="https://fission.codes">Fission</a> experiment by

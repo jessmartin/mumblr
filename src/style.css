@@ -91,9 +91,9 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-button:hover,
+button:hover:enabled,
 button:focus,
-input[type="submit"].card:hover,
+input[type="submit"].card:hover:enabled,
 input[type="submit"].card:focus {
   cursor: pointer;
   opacity: 0.75;
@@ -117,10 +117,15 @@ header {
   float: left;
 }
 
-#log-out {
+#connect-disconnect {
   float: right;
-  margin-top: 26px;
-  margin-left: 20px;
+  margin-top: 23px;
+  margin-left: 12px;
+  background: #fff url("/logo-dark.svg") no-repeat top left;
+  background-size: 300px 20px;
+  background-position: top 10px left -75px;
+  padding-right: 110px;
+  color: red;
 }
 
 .subtitle {
@@ -129,6 +134,7 @@ header {
   color: var(--light);
   float: right;
   margin-top: 36px;
+  font-weight: 700;
 }
 
 input.title-input {
@@ -139,6 +145,7 @@ input.title-input {
 .title-input,
 .body-input {
   width: 100%;
+  font-weight: 700;
 }
 
 input.title-input:focus,

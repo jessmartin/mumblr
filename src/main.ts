@@ -2,18 +2,20 @@ import "./style.css";
 import * as wn from "webnative";
 import FileSystem from "webnative/fs/index";
 
+const permissions = {
+  app: {
+    name: "mumblr",
+    creator: "Jess Martin",
+  },
+  fs: {
+    private: [wn.path.directory("Posts")], // This will be `private/Posts`
+    public: [wn.path.directory("Posts")], // This will be `public/Posts`
+  },
+};
+
 const state = await wn
   .initialise({
-    permissions: {
-      app: {
-        name: "mumblr",
-        creator: "Jess Martin",
-      },
-      fs: {
-        private: [wn.path.directory("Posts")], // This will be `private/Posts`
-        public: [wn.path.directory("Posts")], // This will be `public/Posts`
-      },
-    },
+    permissions: permissions,
   })
   .catch((err) => {
     switch (err) {
@@ -25,9 +27,13 @@ const state = await wn
   });
 
 // Give me maximum debuggage
+// TODO: Disable when in production
 wn.setup.debug({ enabled: true });
 
 let fs: FileSystem | undefined;
+const connectionStatus = document.querySelector<HTMLInputElement>(
+  "#connect-disconnect"
+)!;
 
 switch (state?.scenario) {
   case wn.Scenario.AuthCancelled:
@@ -35,15 +41,31 @@ switch (state?.scenario) {
     break;
 
   case wn.Scenario.AuthSucceeded:
+  // New permissions have been granted
   case wn.Scenario.Continuation:
-    // TODO: Maybe put some 'logged in as' state at the top right?
-    console.log("Logged in");
-    fs = state.fs;
+    // Great success! We can now use the filesystem!
+    console.log("Connected");
+    connectionStatus.value = "C";
+    connectionStatus.style.color = "green";
+    fs = state.fs; // Load the filesystem
+    connectionStatus.addEventListener("click", async function () {
+      wn.leave().then(() => {
+        console.log("Disconnected");
+      });
+    });
+    // Enable the UI
+    document.querySelector<HTMLButtonElement>("#post")!.disabled = false;
+    document.querySelector<HTMLInputElement>("#title-input")!.disabled = false;
+    document.querySelector<HTMLTextAreaElement>("#body-input")!.disabled =
+      false;
     break;
 
   case wn.Scenario.NotAuthorised:
-    wn.redirectToLobby(state.permissions);
-    console.log("Redirected to lobby");
+    connectionStatus.addEventListener("click", async function () {
+      console.log("Redirected to lobby");
+      wn.redirectToLobby(permissions);
+    });
+    console.log("Not connected");
     break;
 }
 
@@ -73,11 +95,4 @@ post.addEventListener("click", async function () {
   } else {
     console.log("no file system");
   }
-});
-
-const logOut = document.querySelector<HTMLInputElement>("#log-out")!;
-logOut.addEventListener("click", async function () {
-  wn.leave().then(() => {
-    console.log("Logged out");
-  });
 });
