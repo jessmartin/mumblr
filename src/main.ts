@@ -75,7 +75,7 @@ post.addEventListener("click", async function () {
   }
 });
 
-const logOut = document.querySelector<HTMLInputElement>("#log-out")!;
+const logOut = document.querySelector<HTMLInputElement>("#connect-disconnect")!;
 logOut.addEventListener("click", async function () {
   wn.leave().then(() => {
     console.log("Logged out");
