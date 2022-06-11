@@ -164,7 +164,7 @@ textarea.body-input {
   font-weight: 700;
 }
 
-.post-button:hover {
+.post-button:not([disabled]):hover {
   background-color: var(--purple);
   color: var(--paper);
 }
