@@ -12,6 +12,12 @@
     "vite": "^2.9.7"
   },
   "dependencies": {
-    "webnative": "^0.32.0"
+    "rehype-stringify": "^9.0.3",
+    "remark": "^14.0.2",
+    "remark-extract-frontmatter": "^3.2.0",
+    "remark-frontmatter": "^4.0.1",
+    "remark-rehype": "^10.1.0",
+    "webnative": "^0.32.0",
+    "yaml": "^2.1.1"
   }
 }
