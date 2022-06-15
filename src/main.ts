@@ -61,6 +61,8 @@ switch (state?.scenario) {
     break;
 
   case wn.Scenario.NotAuthorised:
+    connectionStatus.value = "D";
+    connectionStatus.style.color = "red";
     connectionStatus.addEventListener("click", async function () {
       console.log("Redirected to lobby");
       wn.redirectToLobby(permissions);
