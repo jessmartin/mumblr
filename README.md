@@ -2,7 +2,7 @@
 
 **Micro-blogging in the vein of [tumblr](https://tumblr.com).** Remember tumblr? Me too. A simpler age of blogging. Longer than a tweet. Shorter than a Medium post. Lighter. More ephemeral. More fun. On the surface, mumblr is "self-hosted" microblogging in the spirit of tumblr. But beneath the surface lie some surprises...
 
-Concepturally, mumblr consists of two components:
+Conceptually, mumblr consists of two components:
 
 - A User Interface for writing blog posts in markdown and storing them to IPFS.
 - A static site generator that reads blog posts from IPFS, generates a static website, and writes that site to IPFS.
@@ -32,4 +32,4 @@ A: [IPFS](https://ipfs.io) stands for Interplanetary File System. It's a distrib
 
 Q: Is the "m" in mumblr capitalized or lowercase?
 
-A: Mumblr prefers to be capitalized when at the beginning of a sentence. When occuring within a sentence, mumblr prefers to be lowercase.
+A: Mumblr prefers to be capitalized when at the beginning of a sentence. When occurring within a sentence, mumblr prefers to be lowercase.
