@@ -110,6 +110,7 @@ const buildSiteButton =
   document.querySelector<HTMLInputElement>("#build-button")!;
 
 buildSiteButton.addEventListener("click", async function () {
+  console.log("attempting to build site");
   // Read the most recent Markdown files
   let markdownPosts = [];
   if (fs !== undefined) {
@@ -154,9 +155,15 @@ buildSiteButton.addEventListener("click", async function () {
         new Date(a.data.postedAt as string).getTime()
       );
     });
+    console.log(markdownPosts);
   }
   // Build the HTML/CSS
 
+  // Load the template HTML file locally
+  const template = await fetch("/template.html");
+  console.log(await template.text());
+
   // Write the static site to IPFS
+
   // Show a simple IPFS Web Gateway URL where the site can be viewed
 });
