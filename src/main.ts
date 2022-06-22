@@ -217,7 +217,6 @@ buildSiteButton.addEventListener("click", async function () {
       "public",
       "Apps",
       "mumblr",
-      "css",
       "style.css"
     );
     await fs.add(stylesheetPath, stylesheetString).then(() => {
