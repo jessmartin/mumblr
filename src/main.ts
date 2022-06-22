@@ -117,8 +117,14 @@ buildSiteButton.addEventListener("click", async function () {
   if (fs !== undefined) {
     const linksObject = await fs.ls(wn.path.directory("public", "Posts"));
     const links = Object.entries(linksObject);
+
+    // If file is a directory, skip it
+    const files = await Promise.all(
+      links.filter((link) => (link[1] as object).isFile)
+    );
+
     const posts = await Promise.all(
-      links.map(([name, _]) => {
+      files.map(([name, _]) => {
         const filePath = wn.path.file("public", "Posts", name);
         return fs?.cat(filePath);
       })
