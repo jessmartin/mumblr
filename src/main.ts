@@ -215,7 +215,6 @@ buildSiteButton.addEventListener("click", async function () {
     });
 
     // Write the stylesheet to IPFS
-    // TODO: Check to see if css/style.css exists before writing it
     const stylesheet = await fetch("/templateStyle.css.txt");
     const stylesheetString = await stylesheet.text();
 
@@ -229,7 +228,7 @@ buildSiteButton.addEventListener("click", async function () {
       console.log("stylesheet saved");
     });
 
-    // Publish!
+    // Publish the static html to IPFS
     await fs
       .publish()
       .then(() => {
@@ -239,6 +238,16 @@ buildSiteButton.addEventListener("click", async function () {
         console.log(err);
       });
 
-    // Show a simple IPFS Web Gateway URL where the site can be viewed
+    // Update the UI and show a simple IPFS Web Gateway URL where the site can be viewed
+    const username = await wn.authenticatedUsername();
+    const ipfsUrl = `https://${username}.files.fission.name/p/Apps/mumblr/`;
+
+    buildSiteButton.value = "Build successful!";
+    buildSiteButton.classList.add("success");
+    const visitSiteLink = document.createElement("a");
+    visitSiteLink.href = ipfsUrl;
+    visitSiteLink.innerText = "Visit Site";
+    visitSiteLink.className = "visit-site-link";
+    buildSiteButton.insertAdjacentHTML("afterend", visitSiteLink.outerHTML);
   }
 });

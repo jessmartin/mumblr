@@ -134,6 +134,22 @@ header {
   margin-top: 23px;
 }
 
+#build-button.success {
+  background-color: #4a4dd4;
+  color: #fff;
+}
+
+.visit-site-link {
+  float: right;
+  margin-left: 12px;
+  margin-top: 35px;
+}
+
+.visit-site-link:hover {
+  text-decoration: underline;
+  color: #4a4dd4;
+}
+
 .subtitle {
   font-size: 1rem;
   font-weight: normal;
