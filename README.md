@@ -24,6 +24,12 @@ Mumblr inherits much of the above functionality from Fission's [WebNative librar
 
 WebNative also provides an [app publishing system](https://guide.fission.codes/developers/webnative/platform), but I'm not currently taking advantage of that.
 
+## Watch me build it
+
+<img width="600" alt="Livestream of building mumblr" src="https://user-images.githubusercontent.com/27258/175131445-45121e18-4707-435e-bb45-5fa15834de96.png">
+
+I've been livestreaming most of my work on mumblr. You can view past livestreams in [this playlist](https://www.youtube.com/playlist?list=PLR5cUEyS7wdhcv8v2KDOwRkyP9EPKOHmA).
+
 ## FAQ
 
 Q: What's IPFS?
