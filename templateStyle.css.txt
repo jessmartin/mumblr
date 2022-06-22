@@ -1,0 +1,356 @@
+html,
+body {
+  margin: 0;
+}
+
+body {
+  --primary-bg: #fdfeff;
+  --primary-text: #111111;
+  --secondary-bg: #eeeef3;
+  --secondary-text: #9b9b9b;
+  --hover-bg: #dde1e5;
+  --active-bg: #cdcfd2;
+
+  --dark-primary-bg: #141516;
+  --dark-primary-text: #ebebeb;
+  --dark-secondary-bg: #30373a;
+  --dark-secondary-text: #a4a7a9;
+  --dark-hover-bg: #474c50;
+  --dark-active-bg: #626569;
+}
+
+.dark {
+  --primary-bg: var(--dark-primary-bg);
+  --primary-text: var(--dark-primary-text);
+  --secondary-bg: var(--dark-secondary-bg);
+  --secondary-text: var(--dark-secondary-text);
+  --hover-bg: var(--dark-hover-bg);
+  --active-bg: var(--dark-active-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.light) {
+    --primary-bg: var(--dark-primary-bg);
+    --primary-text: var(--dark-primary-text);
+    --secondary-bg: var(--dark-secondary-bg);
+    --secondary-text: var(--dark-secondary-text);
+    --hover-bg: var(--dark-hover-bg);
+    --active-bg: var(--dark-active-bg);
+  }
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: var(--primary-text);
+  background: var(--primary-bg);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  border-bottom: 8px solid #111111;
+}
+
+input,
+button,
+textarea {
+  font-size: 1em;
+  padding: 0.5em 0.8em;
+  color: var(--primary-text);
+  font-family: system-ui, sans-serif;
+  tab-size: 4;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--secondary-text);
+}
+
+header,
+h1,
+main {
+  width: calc(100% - 32px);
+  max-width: 860px;
+  margin: 1em auto;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .logo {
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 1em;
+}
+
+header a,
+header button {
+  display: inline;
+  cursor: pointer;
+  color: var(--primary-text);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  text-decoration: none;
+  padding: 0.5em 0;
+}
+
+header a:hover,
+header button:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  line-height: 1.4em;
+}
+
+main {
+  margin-bottom: 3em;
+}
+
+.about p,
+.about li {
+  max-width: 64ch;
+  line-height: 1.5em;
+}
+
+.about a {
+  color: inherit;
+}
+
+.about a:hover {
+  background: var(--hover-bg);
+}
+
+form {
+  position: relative;
+  margin-bottom: 2em;
+  overflow: hidden;
+}
+
+form input,
+form textarea {
+  display: block;
+  border-radius: 6px;
+  border: 0;
+  background: var(--hover-bg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form textarea {
+  min-height: 50vh;
+  line-height: 1.5em;
+  resize: vertical;
+}
+
+form input:hover,
+form input:focus,
+form textarea:hover,
+form textarea:focus {
+  outline: 0;
+}
+
+form button[type="submit"] {
+  border-radius: 6px;
+  border: 0;
+  color: var(--primary-bg);
+  background: var(--primary-text);
+  margin-top: 0.5em;
+  float: right;
+  cursor: pointer;
+}
+
+form button[type="submit"]:hover {
+  background: var(--secondary-text);
+}
+
+.pageControls {
+  float: right;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75em;
+}
+
+.pageControls a {
+  color: var(--primary-text);
+  text-decoration: none;
+}
+
+.pageControls a:hover {
+  text-decoration: underline;
+}
+
+a.pageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 50%;
+  background: var(--secondary-bg);
+}
+
+a.pageButton:hover {
+  background: var(--hover-bg);
+  text-decoration: none;
+}
+
+.message {
+  font-style: italic;
+  color: var(--secondary-text);
+  margin-bottom: 2em;
+}
+
+.update {
+  margin-bottom: 2.5em;
+  word-break: break-word;
+}
+
+.update .update-t {
+  font-size: 14px;
+  color: var(--secondary-text);
+  margin-bottom: -0.5em;
+}
+
+.update .update-t a {
+  color: var(--secondary-text);
+  text-decoration: none;
+}
+
+.update .update-t a:hover {
+  text-decoration: underline;
+}
+
+.update-t .relativestamp {
+  margin-bottom: 6px;
+}
+
+/* update Markdown */
+
+.update h1,
+.update h2,
+.update h3 {
+  margin: 0.75em 0 0.5em 0;
+  line-height: 1.4em;
+}
+
+.update h1 {
+  font-size: 1.75em;
+}
+
+.update h2 {
+  font-size: 1.5em;
+}
+
+.update h3 {
+  font-size: 1.2em;
+}
+
+.update h4,
+.update h5,
+.update h6 {
+  font-size: 1em;
+}
+
+.update p,
+.update li {
+  line-height: 1.5em;
+  max-width: 64ch;
+}
+
+.update strike {
+  color: var(--secondary-text);
+}
+
+.update img {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 6px;
+}
+
+.update a {
+  color: var(--primary-text);
+  text-decoration: underline;
+}
+
+.update ul,
+.update ol {
+  padding-left: 3ch;
+}
+
+.update pre,
+.update code {
+  background: var(--hover-bg);
+  font-size: 1em;
+  font-family: "IBM Plex Mono", "Menlo", "Monaco", monospace;
+  /*
+     * In Safari (2021), word-break: break-word from `.update` combined with
+     * certain contents of <pre> tags that do not begin lines with whitespace
+     * break line-wrapping behavior. This inversion of word-break works around
+     * that Safari bug (or at least, what appears to be a browser bug, as
+     * Chrome does not reproduce).
+     */
+  word-break: initial;
+}
+
+.update pre {
+  border-radius: 6px;
+  box-sizing: border-box;
+  padding: 12px 8px;
+  overflow-x: auto;
+}
+
+.update code {
+  padding: 1px 5px;
+  border-radius: 6px;
+}
+
+.update pre code {
+  padding: 0;
+}
+
+.update blockquote {
+  margin: 0;
+  border-left: 4px solid var(--active-bg);
+  padding-left: 1em;
+  display: block;
+}
+
+@media only screen and (min-width: 760px) {
+  .update {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+  }
+  .update-t {
+    flex-grow: 0;
+    flex-shrink: 0;
+    /* Increase to 134 to make room for clockstamp */
+    width: 100px;
+    margin-top: 3px;
+  }
+  .update-s {
+    width: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .update-s :first-child {
+    margin-top: 0;
+  }
+}
