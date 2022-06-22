@@ -16,7 +16,7 @@ const permissions = {
   },
   fs: {
     private: [wn.path.directory("Posts")], // This will be `private/Posts`
-    public: [wn.path.directory("Posts")], // This will be `public/Posts`
+    public: [wn.path.directory("Posts"), wn.path.directory("Apps", "mumblr")], // This will be `public/Posts`
   },
 };
 
@@ -113,6 +113,7 @@ buildSiteButton.addEventListener("click", async function () {
   console.log("attempting to build site");
   // Read the most recent Markdown files
   let markdownPosts = [];
+  // TODO: Make this into a "break" statement
   if (fs !== undefined) {
     const linksObject = await fs.ls(wn.path.directory("public", "Posts"));
     const links = Object.entries(linksObject);
@@ -156,14 +157,83 @@ buildSiteButton.addEventListener("click", async function () {
       );
     });
     console.log(markdownPosts);
+    // Build the HTML/CSS
+
+    // Load the template HTML file locally
+    const template = await fetch("/template.html");
+    const templateString = await template.text();
+    const parser = new DOMParser();
+    const templateDoc = parser.parseFromString(templateString, "text/html");
+
+    // Generate the HTML for each markdown post and insert into template html
+    const blogPostsDiv = document.createElement("div");
+    // iterate over the posts
+    for await (const markdownPost of markdownPosts) {
+      const postDate = markdownPost.data.postedAt as Date;
+      const postDateString = postDate.toLocaleString("en-us", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+      // build up blogPostHtml
+      const postDiv = document.createElement("div");
+      postDiv.innerHTML = `
+      <div class="update">
+        <div class="update-t" data-timestamp="#">
+          <a class="datestamp" href="#" title="Updates on this date">${postDateString}</a>
+          <!-- <a class="clockstamp" href="/updates/???" title="Permalink to this update">???</a> -->
+        </div>
+        <div class="update-s">
+          ${markdownPost.value}
+        </div>
+      </div>
+      `;
+      blogPostsDiv.appendChild(postDiv);
+    }
+    const feedDiv = templateDoc.querySelector("div.feed");
+    feedDiv?.appendChild(blogPostsDiv);
+
+    // Write the static site to IPFS
+    // Write the template HTML to index.html
+    const indexHtmlPath = wn.path.file(
+      "public",
+      "Apps",
+      "mumblr",
+      "index.html"
+    );
+    const serializer = new XMLSerializer();
+    const templateDocString = serializer.serializeToString(templateDoc);
+
+    await fs.add(indexHtmlPath, templateDocString).then(() => {
+      console.log("blog posts saved");
+    });
+
+    // Write the stylesheet to IPFS
+    // TODO: Check to see if css/style.css exists before writing it
+    const stylesheet = await fetch("/templateStyle.css.txt");
+    const stylesheetString = await stylesheet.text();
+
+    const stylesheetPath = wn.path.file(
+      "public",
+      "Apps",
+      "mumblr",
+      "css",
+      "style.css"
+    );
+    await fs.add(stylesheetPath, stylesheetString).then(() => {
+      console.log("stylesheet saved");
+    });
+
+    // Publish!
+    await fs
+      .publish()
+      .then(() => {
+        console.log("file system published");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // Show a simple IPFS Web Gateway URL where the site can be viewed
   }
-  // Build the HTML/CSS
-
-  // Load the template HTML file locally
-  const template = await fetch("/template.html");
-  console.log(await template.text());
-
-  // Write the static site to IPFS
-
-  // Show a simple IPFS Web Gateway URL where the site can be viewed
 });
