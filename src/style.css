@@ -123,9 +123,14 @@ header {
   margin-left: 12px;
   background: #fff url("/logo-dark.svg") no-repeat top left;
   background-size: 300px 20px;
-  background-position: top 10px left -75px;
+  background-position: top 10px left -55px;
   padding-right: 110px;
   color: orange;
+  border-radius: 6px;
+}
+
+#connect-disconnect-icon {
+  width: 35px;
 }
 
 #build-button {
