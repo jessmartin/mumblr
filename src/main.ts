@@ -81,16 +81,21 @@ switch (state?.scenario) {
 const publishBtn = document.querySelector<HTMLInputElement>("#post")!;
 
 publishBtn.addEventListener("click", async function () {
+  const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
+
+  // If body is blank, don't publish
+  if (body.value.trim().length === 0) {
+    return;
+  }
+
   publishBtn.disabled = true;
   publishBtn.value = "Publishing...";
 
   const postTimestamp = Date.now();
-  const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
   const frontmatter = `---
 postedAt: ${postTimestamp}
 ---\n`;
   const postContent = frontmatter + body.value;
-  // TODO: If body is blank, don't allow saving?
 
   if (fs !== undefined) {
     const filePath = wn.path.file("public", "Posts", `${postTimestamp}.md`);
