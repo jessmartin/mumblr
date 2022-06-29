@@ -78,9 +78,12 @@ switch (state?.scenario) {
     break;
 }
 
-const post = document.querySelector<HTMLInputElement>("#post")!;
+const publishBtn = document.querySelector<HTMLInputElement>("#post")!;
 
-post.addEventListener("click", async function () {
+publishBtn.addEventListener("click", async function () {
+  publishBtn.disabled = true;
+  publishBtn.value = "Publishing...";
+
   console.log("attempting to save file");
 
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
@@ -99,6 +102,8 @@ postedAt: ${new Date().toISOString().split("T")[0]}
       .publish()
       .then(() => {
         console.log("file system published");
+        publishBtn.value = "Publish successful!";
+        enablePublishBtn();
       })
       .catch((err) => {
         console.log(err);
@@ -107,6 +112,12 @@ postedAt: ${new Date().toISOString().split("T")[0]}
     console.log("no file system");
   }
 });
+
+async function enablePublishBtn() {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  publishBtn.value = "Publish";
+  publishBtn.disabled = false;
+}
 
 const buildSiteButton =
   document.querySelector<HTMLInputElement>("#build-button")!;
