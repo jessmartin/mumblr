@@ -8,6 +8,8 @@ import rehypeStringify from "rehype-stringify";
 import remarkFrontmatter from "remark-frontmatter";
 import extract from "remark-extract-frontmatter";
 import { parse } from "yaml";
+import ConnectedIcon from "../plugin-connected.svg";
+import DisconnectedSvg from '../plugin-disconnected.svg'
 import { BaseLink } from "webnative/fs/types";
 
 const permissions = {
@@ -53,8 +55,7 @@ switch (state?.scenario) {
   case wn.Scenario.Continuation:
     // Great success! We can now use the filesystem!
     console.log("Connected");
-    connectionStatus.value = "C";
-    connectionStatus.style.color = "green";
+    connectionStatus.innerHTML = `<img src="${ConnectedIcon}" id="connect-disconnect-icon" >`
     fs = state.fs; // Load the filesystem
     connectionStatus.addEventListener("click", async function () {
       wn.leave().then(() => {
@@ -68,8 +69,7 @@ switch (state?.scenario) {
     break;
 
   case wn.Scenario.NotAuthorised:
-    connectionStatus.value = "D";
-    connectionStatus.style.color = "red";
+    connectionStatus.innerHTML= `<img src="${DisconnectedSvg}" id="connect-disconnect-icon" >`
     connectionStatus.addEventListener("click", async function () {
       console.log("Redirected to lobby");
       wn.redirectToLobby(permissions);

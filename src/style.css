@@ -123,9 +123,22 @@ header {
   margin-left: 12px;
   background: #fff url("/logo-dark.svg") no-repeat top left;
   background-size: 300px 20px;
-  background-position: top 10px left -75px;
+  background-position: top 10px left -55px;
   padding-right: 110px;
   color: orange;
+  border-radius: 6px;
+}
+
+#connect-disconnect-icon {
+  width: 35px; 
+}
+
+#connecting-icon {
+  width: 35px;
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 #build-button {
@@ -198,4 +211,13 @@ footer {
 footer p {
   color: #999;
   font-size: 0.825rem;
+}
+
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
+  }
 }
