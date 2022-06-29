@@ -341,8 +341,7 @@ a.pageButton:hover {
   .update-t {
     flex-grow: 0;
     flex-shrink: 0;
-    /* Increase to 134 to make room for clockstamp */
-    width: 100px;
+    width: 134px;
     margin-top: 3px;
   }
   .update-s {

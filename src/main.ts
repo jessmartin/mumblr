@@ -63,7 +63,6 @@ switch (state?.scenario) {
     });
     // Enable the UI
     document.querySelector<HTMLButtonElement>("#post")!.disabled = false;
-    document.querySelector<HTMLInputElement>("#title-input")!.disabled = false;
     document.querySelector<HTMLTextAreaElement>("#body-input")!.disabled =
       false;
     break;
@@ -79,25 +78,36 @@ switch (state?.scenario) {
     break;
 }
 
-const post = document.querySelector<HTMLInputElement>("#post")!;
+const publishBtn = document.querySelector<HTMLInputElement>("#post")!;
 
-post.addEventListener("click", async function () {
-  console.log("attempting to save file");
-  const title = document.querySelector<HTMLInputElement>(".title-input")!;
-  // If title is blank, don't allow saving?
-
+publishBtn.addEventListener("click", async function () {
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
-  // If body is blank, don't allow saving?
+
+  // If body is blank, don't publish
+  if (body.value.trim().length === 0) {
+    return;
+  }
+
+  publishBtn.disabled = true;
+  publishBtn.value = "Publishing...";
+
+  const postTimestamp = Date.now();
+  const frontmatter = `---
+postedAt: ${postTimestamp}
+---\n`;
+  const postContent = frontmatter + body.value;
 
   if (fs !== undefined) {
-    const filePath = wn.path.file("public", "Posts", `${title.value}.md`);
-    await fs.add(filePath, body.value).then(() => {
+    const filePath = wn.path.file("public", "Posts", `${postTimestamp}.md`);
+    await fs.add(filePath, postContent).then(() => {
       console.log("file saved");
     });
     await fs
       .publish()
       .then(() => {
         console.log("file system published");
+        publishBtn.value = "Publish successful!";
+        enablePublishBtn();
       })
       .catch((err) => {
         console.log(err);
@@ -107,11 +117,20 @@ post.addEventListener("click", async function () {
   }
 });
 
+async function enablePublishBtn() {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  publishBtn.value = "Publish";
+  publishBtn.disabled = false;
+}
+
 const buildSiteButton =
   document.querySelector<HTMLInputElement>("#build-button")!;
 
 buildSiteButton.addEventListener("click", async function () {
   console.log("attempting to build site");
+  buildSiteButton.disabled = true;
+  buildSiteButton.value = "Building...";
+
   // Read the most recent Markdown files
   let markdownPosts = [];
   // TODO: Make this into a "break" statement
@@ -159,24 +178,32 @@ buildSiteButton.addEventListener("click", async function () {
     // Sort the files by postedAt
     markdownPosts.sort((a, b) => {
       return (
-        new Date(b.data.postedAt as string).getTime() -
-        new Date(a.data.postedAt as string).getTime()
+        new Date(b.data.postedAt as number).getTime() -
+        new Date(a.data.postedAt as number).getTime()
       );
     });
     console.log(markdownPosts);
     // Build the HTML/CSS
 
     // Load the template HTML file locally
-    const template = await fetch("/template.html");
-    const templateString = await template.text();
+    const indexTemplate = await fetch("/indexTemplate.html");
+    const indexTemplateString = await indexTemplate.text();
     const parser = new DOMParser();
-    const templateDoc = parser.parseFromString(templateString, "text/html");
+    const serializer = new XMLSerializer();
+    const indexTemplateDoc = parser.parseFromString(
+      indexTemplateString,
+      "text/html"
+    );
+
+    const postTemplate = await fetch("/postTemplate.html");
+    const postTemplateString = await postTemplate.text();
 
     // Generate the HTML for each markdown post and insert into template html
     const blogPostsDiv = document.createElement("div");
     // iterate over the posts
     for await (const markdownPost of markdownPosts) {
-      const postDate = markdownPost.data.postedAt as Date;
+      const postTimestamp = markdownPost.data.postedAt as number;
+      const postDate = new Date(markdownPost.data.postedAt as number);
       const postDateString = postDate.toLocaleString("en-us", {
         year: "numeric",
         month: "numeric",
@@ -187,17 +214,40 @@ buildSiteButton.addEventListener("click", async function () {
       postDiv.innerHTML = `
       <div class="update">
         <div class="update-t" data-timestamp="#">
-          <a class="datestamp" href="#" title="Updates on this date">${postDateString}</a>
-          <!-- <a class="clockstamp" href="/updates/???" title="Permalink to this update">???</a> -->
+          <a class="datestamp" href="updates/${postTimestamp}" title="Permalink to this update">${postDateString}</a>
+          <a class="clockstamp" href="updates/${postTimestamp}" title="Permalink to this update">${
+        postDate.getHours() + ":" + postDate.getMinutes()
+      }</a>
         </div>
         <div class="update-s">
           ${markdownPost.value}
         </div>
       </div>
       `;
+
+      // Create a page for this post
+      const postDoc = parser.parseFromString(postTemplateString, "text/html");
+      const innerPostDiv = postDoc.querySelector("div.feed");
+      innerPostDiv?.appendChild(postDiv);
+
+      // Write this page to IPFS
+      const updatesHtmlPath = wn.path.file(
+        "public",
+        "Apps",
+        "mumblr",
+        "updates",
+        `${postTimestamp}`,
+        "index.html"
+      );
+      const postDocString = serializer.serializeToString(postDoc);
+      await fs.add(updatesHtmlPath, postDocString).then(() => {
+        console.log("blog post added");
+      });
+
+      // Add the post to the HTML of all posts
       blogPostsDiv.appendChild(postDiv);
     }
-    const feedDiv = templateDoc.querySelector("div.feed");
+    const feedDiv = indexTemplateDoc.querySelector("div.feed");
     feedDiv?.appendChild(blogPostsDiv);
 
     // Write the static site to IPFS
@@ -208,11 +258,10 @@ buildSiteButton.addEventListener("click", async function () {
       "mumblr",
       "index.html"
     );
-    const serializer = new XMLSerializer();
-    const templateDocString = serializer.serializeToString(templateDoc);
+    const templateDocString = serializer.serializeToString(indexTemplateDoc);
 
     await fs.add(indexHtmlPath, templateDocString).then(() => {
-      console.log("blog posts saved");
+      console.log("index page added");
     });
 
     // Write the stylesheet to IPFS
@@ -226,7 +275,7 @@ buildSiteButton.addEventListener("click", async function () {
       "style.css"
     );
     await fs.add(stylesheetPath, stylesheetString).then(() => {
-      console.log("stylesheet saved");
+      console.log("stylesheet added");
     });
 
     // Publish the static html to IPFS
@@ -250,5 +299,13 @@ buildSiteButton.addEventListener("click", async function () {
     visitSiteLink.innerText = "Visit Site";
     visitSiteLink.className = "visit-site-link";
     buildSiteButton.insertAdjacentHTML("afterend", visitSiteLink.outerHTML);
+    await enableBuildSiteButton();
   }
 });
+
+async function enableBuildSiteButton() {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  buildSiteButton.disabled = false;
+  buildSiteButton.classList.remove("success");
+  buildSiteButton.value = "Build";
+}
