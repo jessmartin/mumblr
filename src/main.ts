@@ -84,11 +84,15 @@ post.addEventListener("click", async function () {
   console.log("attempting to save file");
 
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
-  // If body is blank, don't allow saving?
+  const frontmatter = `---
+postedAt: ${new Date().toISOString().split("T")[0]}
+---\n`;
+  const postContent = frontmatter + body.value;
+  // TODO: If body is blank, don't allow saving?
 
   if (fs !== undefined) {
     const filePath = wn.path.file("public", "Posts", `${Date.now()}.md`);
-    await fs.add(filePath, body.value).then(() => {
+    await fs.add(filePath, postContent).then(() => {
       console.log("file saved");
     });
     await fs
