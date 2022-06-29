@@ -9,7 +9,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import extract from "remark-extract-frontmatter";
 import { parse } from "yaml";
 import ConnectedIcon from "../plugin-connected.svg";
-import DisconnectedSvg from '../plugin-disconnected.svg'
+import DisconnectedSvg from "../plugin-disconnected.svg";
 import { BaseLink } from "webnative/fs/types";
 
 const permissions = {
@@ -55,7 +55,7 @@ switch (state?.scenario) {
   case wn.Scenario.Continuation:
     // Great success! We can now use the filesystem!
     console.log("Connected");
-    connectionStatus.innerHTML = `<img src="${ConnectedIcon}" id="connect-disconnect-icon" >`
+    connectionStatus.innerHTML = `<img src="${ConnectedIcon}" id="connect-disconnect-icon" >`;
     fs = state.fs; // Load the filesystem
     connectionStatus.addEventListener("click", async function () {
       wn.leave().then(() => {
@@ -69,7 +69,7 @@ switch (state?.scenario) {
     break;
 
   case wn.Scenario.NotAuthorised:
-    connectionStatus.innerHTML= `<img src="${DisconnectedSvg}" id="connect-disconnect-icon" >`
+    connectionStatus.innerHTML = `<img src="${DisconnectedSvg}" id="connect-disconnect-icon" >`;
     connectionStatus.addEventListener("click", async function () {
       console.log("Redirected to lobby");
       wn.redirectToLobby(permissions);
@@ -184,12 +184,12 @@ buildSiteButton.addEventListener("click", async function () {
     });
     console.log(markdownPosts);
     // Build the HTML/CSS
+    const parser = new DOMParser();
+    const serializer = new XMLSerializer();
 
     // Load the template HTML file locally
     const indexTemplate = await fetch("/indexTemplate.html");
     const indexTemplateString = await indexTemplate.text();
-    const parser = new DOMParser();
-    const serializer = new XMLSerializer();
     const indexTemplateDoc = parser.parseFromString(
       indexTemplateString,
       "text/html"
@@ -276,6 +276,21 @@ buildSiteButton.addEventListener("click", async function () {
     );
     await fs.add(stylesheetPath, stylesheetString).then(() => {
       console.log("stylesheet added");
+    });
+
+    // Write the about page to IPFS
+    const aboutPage = await fetch("/about.html");
+    const aboutPageString = await aboutPage.text();
+
+    const aboutPagePath = wn.path.file(
+      "public",
+      "Apps",
+      "mumblr",
+      "about",
+      "index.html"
+    );
+    await fs.add(aboutPagePath, aboutPageString).then(() => {
+      console.log("about page added");
     });
 
     // Publish the static html to IPFS
