@@ -84,17 +84,16 @@ publishBtn.addEventListener("click", async function () {
   publishBtn.disabled = true;
   publishBtn.value = "Publishing...";
 
-  console.log("attempting to save file");
-
+  const postTimestamp = Date.now();
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
   const frontmatter = `---
-postedAt: ${new Date().toISOString().split("T")[0]}
+postedAt: ${postTimestamp}
 ---\n`;
   const postContent = frontmatter + body.value;
   // TODO: If body is blank, don't allow saving?
 
   if (fs !== undefined) {
-    const filePath = wn.path.file("public", "Posts", `${Date.now()}.md`);
+    const filePath = wn.path.file("public", "Posts", `${postTimestamp}.md`);
     await fs.add(filePath, postContent).then(() => {
       console.log("file saved");
     });
@@ -171,24 +170,32 @@ buildSiteButton.addEventListener("click", async function () {
     // Sort the files by postedAt
     markdownPosts.sort((a, b) => {
       return (
-        new Date(b.data.postedAt as string).getTime() -
-        new Date(a.data.postedAt as string).getTime()
+        new Date(b.data.postedAt as number).getTime() -
+        new Date(a.data.postedAt as number).getTime()
       );
     });
     console.log(markdownPosts);
     // Build the HTML/CSS
 
     // Load the template HTML file locally
-    const template = await fetch("/template.html");
-    const templateString = await template.text();
+    const indexTemplate = await fetch("/indexTemplate.html");
+    const indexTemplateString = await indexTemplate.text();
     const parser = new DOMParser();
-    const templateDoc = parser.parseFromString(templateString, "text/html");
+    const serializer = new XMLSerializer();
+    const indexTemplateDoc = parser.parseFromString(
+      indexTemplateString,
+      "text/html"
+    );
+
+    const postTemplate = await fetch("/postTemplate.html");
+    const postTemplateString = await postTemplate.text();
 
     // Generate the HTML for each markdown post and insert into template html
     const blogPostsDiv = document.createElement("div");
     // iterate over the posts
     for await (const markdownPost of markdownPosts) {
-      const postDate = markdownPost.data.postedAt as Date;
+      const postTimestamp = markdownPost.data.postedAt as number;
+      const postDate = new Date(markdownPost.data.postedAt as number);
       const postDateString = postDate.toLocaleString("en-us", {
         year: "numeric",
         month: "numeric",
@@ -199,17 +206,40 @@ buildSiteButton.addEventListener("click", async function () {
       postDiv.innerHTML = `
       <div class="update">
         <div class="update-t" data-timestamp="#">
-          <a class="datestamp" href="#" title="Updates on this date">${postDateString}</a>
-          <!-- <a class="clockstamp" href="/updates/???" title="Permalink to this update">???</a> -->
+          <a class="datestamp" href="updates/${postTimestamp}" title="Permalink to this update">${postDateString}</a>
+          <a class="clockstamp" href="updates/${postTimestamp}" title="Permalink to this update">${
+        postDate.getHours() + ":" + postDate.getMinutes()
+      }</a>
         </div>
         <div class="update-s">
           ${markdownPost.value}
         </div>
       </div>
       `;
+
+      // Create a page for this post
+      const postDoc = parser.parseFromString(postTemplateString, "text/html");
+      const innerPostDiv = postDoc.querySelector("div.feed");
+      innerPostDiv?.appendChild(postDiv);
+
+      // Write this page to IPFS
+      const updatesHtmlPath = wn.path.file(
+        "public",
+        "Apps",
+        "mumblr",
+        "updates",
+        `${postTimestamp}`,
+        "index.html"
+      );
+      const postDocString = serializer.serializeToString(postDoc);
+      await fs.add(updatesHtmlPath, postDocString).then(() => {
+        console.log("blog post added");
+      });
+
+      // Add the post to the HTML of all posts
       blogPostsDiv.appendChild(postDiv);
     }
-    const feedDiv = templateDoc.querySelector("div.feed");
+    const feedDiv = indexTemplateDoc.querySelector("div.feed");
     feedDiv?.appendChild(blogPostsDiv);
 
     // Write the static site to IPFS
@@ -220,8 +250,7 @@ buildSiteButton.addEventListener("click", async function () {
       "mumblr",
       "index.html"
     );
-    const serializer = new XMLSerializer();
-    const templateDocString = serializer.serializeToString(templateDoc);
+    const templateDocString = serializer.serializeToString(indexTemplateDoc);
 
     await fs.add(indexHtmlPath, templateDocString).then(() => {
       console.log("blog posts saved");
