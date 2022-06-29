@@ -63,7 +63,6 @@ switch (state?.scenario) {
     });
     // Enable the UI
     document.querySelector<HTMLButtonElement>("#post")!.disabled = false;
-    document.querySelector<HTMLInputElement>("#title-input")!.disabled = false;
     document.querySelector<HTMLTextAreaElement>("#body-input")!.disabled =
       false;
     break;
@@ -83,14 +82,12 @@ const post = document.querySelector<HTMLInputElement>("#post")!;
 
 post.addEventListener("click", async function () {
   console.log("attempting to save file");
-  const title = document.querySelector<HTMLInputElement>(".title-input")!;
-  // If title is blank, don't allow saving?
 
   const body = document.querySelector<HTMLTextAreaElement>(".body-input")!;
   // If body is blank, don't allow saving?
 
   if (fs !== undefined) {
-    const filePath = wn.path.file("public", "Posts", `${title.value}.md`);
+    const filePath = wn.path.file("public", "Posts", `${Date.now()}.md`);
     await fs.add(filePath, body.value).then(() => {
       console.log("file saved");
     });
