@@ -8,6 +8,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkFrontmatter from "remark-frontmatter";
 import extract from "remark-extract-frontmatter";
 import { parse } from "yaml";
+import { BaseLink } from "webnative/fs/types";
 
 const permissions = {
   app: {
@@ -120,7 +121,7 @@ buildSiteButton.addEventListener("click", async function () {
 
     // If file is a directory, skip it
     const files = await Promise.all(
-      links.filter((link) => (link[1] as object).isFile)
+      links.filter((link) => (link[1] as BaseLink).isFile)
     );
 
     const posts = await Promise.all(
