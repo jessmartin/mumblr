@@ -123,6 +123,9 @@ const buildSiteButton =
 
 buildSiteButton.addEventListener("click", async function () {
   console.log("attempting to build site");
+  buildSiteButton.disabled = true;
+  buildSiteButton.value = "Building...";
+
   // Read the most recent Markdown files
   let markdownPosts = [];
   // TODO: Make this into a "break" statement
@@ -253,7 +256,7 @@ buildSiteButton.addEventListener("click", async function () {
     const templateDocString = serializer.serializeToString(indexTemplateDoc);
 
     await fs.add(indexHtmlPath, templateDocString).then(() => {
-      console.log("blog posts saved");
+      console.log("index page added");
     });
 
     // Write the stylesheet to IPFS
@@ -267,7 +270,7 @@ buildSiteButton.addEventListener("click", async function () {
       "style.css"
     );
     await fs.add(stylesheetPath, stylesheetString).then(() => {
-      console.log("stylesheet saved");
+      console.log("stylesheet added");
     });
 
     // Publish the static html to IPFS
@@ -291,5 +294,13 @@ buildSiteButton.addEventListener("click", async function () {
     visitSiteLink.innerText = "Visit Site";
     visitSiteLink.className = "visit-site-link";
     buildSiteButton.insertAdjacentHTML("afterend", visitSiteLink.outerHTML);
+    await enableBuildSiteButton();
   }
 });
+
+async function enableBuildSiteButton() {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  buildSiteButton.disabled = false;
+  buildSiteButton.classList.remove("success");
+  buildSiteButton.value = "Build";
+}
