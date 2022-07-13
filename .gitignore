@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 
 .tool-versions
+
+# Svelte
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
