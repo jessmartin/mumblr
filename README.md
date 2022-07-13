@@ -7,6 +7,27 @@ Conceptually, mumblr consists of two components:
 - A User Interface for writing blog posts in markdown and storing them to IPFS.
 - A static site generator that reads blog posts from IPFS, generates a static website, and writes that site to IPFS.
 
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+## Building
+
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
 ## What makes mumblr different from other blogging platforms?
 
 - **No user accounts.** Rather than creating an account with a username and password, mumblr asks for your permission to access to write and read data on your behalf. This permission is secured by a private key that resides in your browser and never leaves your local machine; all requests go directly from your browser to the IPFS network.
