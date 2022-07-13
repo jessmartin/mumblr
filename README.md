@@ -19,7 +19,7 @@ Conceptually, mumblr consists of two components:
 
 Mumblr inherits much of the above functionality from Fission's [WebNative library](https://guide.fission.codes/developers/webnative). WebNative handles a lot for mumblr, letting mumblr focus on it's unique function: the user interface for writing and the static site generation. Here are a few things handled by WebNative:
 
-- [authentication with WebCrypto and ](https://guide.fission.codes/developers/webnative/auth): the creation of keys in the user's browser and the delegation of permissions from the user to mumblr.
+- [authentication with WebCrypto and UCAN](https://guide.fission.codes/developers/webnative/auth): the creation of keys in the user's browser and the delegation of permissions from the user to mumblr via UCANs.
 - [storage with WNFS](https://guide.fission.codes/developers/webnative/file-system-wnfs): creating and managing a filesystem for the user in IPFS, wrapping IPFS with some handy methods for reading and writing to that file system.
 
 WebNative also provides an [app publishing system](https://guide.fission.codes/developers/webnative/platform), but I'm not currently taking advantage of that.
