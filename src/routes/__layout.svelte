@@ -1,8 +1,13 @@
-<script>
+<script lang="ts">
 	import '../app.css';
+	import { initialize } from '$lib/webnative/utils';
+
+	function handleClick() {
+		initialize();
+	}
 </script>
 
-<button id="connect-disconnect" type="submit" class="connect-disconnect">
+<button id="connect-disconnect" type="submit" on:click|once={handleClick}>
 	<img src="./plugin-connecting.svg" id="connecting-icon" />
 </button>
 
