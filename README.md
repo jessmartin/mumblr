@@ -1,3 +1,6 @@
+> [!WARNING]
+> [Fission is winding down](https://fission.codes/blog/farewell-from-fission/) and the infra needed for this app is no longer hosted by them. Use this as reference only.
+
 # mumblr: blogging, decentralized.
 
 **Micro-blogging in the vein of [tumblr](https://tumblr.com).** Remember tumblr? Me too. A simpler age of blogging. Longer than a tweet. Shorter than a Medium post. Lighter. More ephemeral. More fun. On the surface, mumblr is "self-hosted" microblogging in the spirit of tumblr. But beneath the surface lie some surprises...
